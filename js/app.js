@@ -66,7 +66,6 @@ function startDeepAR(canvas) {
       // start video immediately after the initalization, mirror = true
       deepAR.startVideo(true);
 
-
       deepAR.switchEffect(0, 'slot', './effects/aviators', function() {
         // effect loaded
       });
@@ -83,6 +82,25 @@ function startDeepAR(canvas) {
     filterIndex = (filterIndex + 1) % filters.length;
     deepAR.switchEffect(0, 'slot', filters[filterIndex]);
   }
+
+
+  // Because we have to use a canvas to render to and then stream to the
+  // Vonage publisher, changing tabs has to pause the video streaming otherwise it will cause a crash
+  // by pausing the 'window.requestAnimationFrame', more can be seen in the documentation:
+  // https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
+  var visible = true;
+  document.addEventListener("visibilitychange", function (event) {
+    visible = !visible;
+    // pause and resume are not required, but it will pause the calls to 'window.requestAnimationFrame' 
+    // and the entire rendering loop, which should improve general performance and battery life
+    if (!visible) {
+      deepAR.pause()
+      deepAR.stopVideo();
+    } else {
+      deepAR.resume();
+      deepAR.startVideo(true)
+    }
+  })
 }
 
 
