@@ -16,4 +16,7 @@ To run the sample:
 	- Click "Create" and on the next screen select Connect
 	- Now in your session playground screen select "Publish stream" and "Continue" in the next dialog (you don't need to set any options)
 7) In app.js, enter apiKey, sessionId and token
-8) Start the development server by running `python server.py` and go to `http://localhost:8888` 
+8) Start the development server by running `python server.py` and go to `http://localhost:8888`
+
+## Changing tabs
+**Changing tabs will pause** your video stream, because of the underlying usage of a canvas which pauses rendering whenever a tab is changed. If you need continuous video streaming we recommend using a **seperate browser window**, as there is no current workaround for this issue. You can read more in the documentation of the [window.requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame) function.
