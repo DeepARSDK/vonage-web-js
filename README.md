@@ -6,7 +6,7 @@ To run the sample:
 
 1) Sign up at [DeepAR](https://developer.deepar.ai) and create a project.
 2) Copy the license key and paste it to `app.js` (instead of your_license_key_here string)
-3) Download the DeepAR SDK from https://developer.deepar.ai and copy the deepar.js, deepar.wasm, models-68-extreme.bin and segmentation.zip into deepar folder
+3) Download the DeepAR SDK from https://developer.deepar.ai and copy the deepar.js, deepar.wasm, models-68-extreme.bin and segmentation.zip into deepar folder. Make sure to set libPath and segmentationInfoZip properties during the DeepAR object initialisation (addition from new SDK version)
 4) Sign up on https://www.vonage.com/communications-apis/video and either create a new project or use an existing project.
 5) Go to your project page and scroll down to the Project Tools section. From there, you can generate a session ID and token manually. Use the project’s API key along with the session ID and token you generated.
 6) To quickly test the demo go to https://tokbox.com/developer/tools/playground/ on another device (e.g. desktop) to create a conversation room where you can see the feed from test app:
