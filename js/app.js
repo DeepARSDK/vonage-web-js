@@ -1,11 +1,12 @@
 // replace these values with those generated in your TokBox Account
-var apiKey = '';
-var sessionId = '';
-var token = '';
+var apiKey = '46855264';
+var sessionId = '1_MX40Njg1NTI2NH5-MTYwNjM4MjY3OTQ3OH5OckpXUVNqa0dWRUtpemRteGoxc01FMU9-fg';
+var token = 'T1==cGFydG5lcl9pZD00Njg1NTI2NCZzaWc9ZGNmYzI4Y2RlZWUxNjNmMmIzYmY5NWJjYzViYjc2ZDQ2NTJhNjk3YzpzZXNzaW9uX2lkPTFfTVg0ME5qZzFOVEkyTkg1LU1UWXdOak00TWpZM09UUTNPSDVPY2twWFVWTnFhMGRXUlV0cGVtUnRlR294YzAxRk1VOS1mZyZjcmVhdGVfdGltZT0xNjA2MzgyNjk3Jm5vbmNlPTAuODkxMzg0ODE5ODAwMDY5NiZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNjA2Mzg2Mjk3JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9';
 
 
 // create canvas on which DeepAR will render
 var deepARCanvas = document.createElement('canvas');
+var canvasContext = deepARCanvas.getContext('webgl');
 var mediaStream = deepARCanvas.captureStream(25);
 var videoTracks = mediaStream.getVideoTracks();
 
