@@ -6,7 +6,10 @@ var token = 'T1==cGFydG5lcl9pZD00Njg1NTI2NCZzaWc9ZGNmYzI4Y2RlZWUxNjNmMmIzYmY5NWJ
 
 // create canvas on which DeepAR will render
 var deepARCanvas = document.createElement('canvas');
-var canvasContext = deepARCanvas.getContext('webgl');
+
+// Firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1572422
+// canvas.captureStream causes an error if getContext not called before. Chrome does not need the line below.
+var canvasContext = deepARCanvas.getContext('webgl'); 
 var mediaStream = deepARCanvas.captureStream(25);
 var videoTracks = mediaStream.getVideoTracks();
 
