@@ -40,17 +40,20 @@ function initializeSession(videoSource) {
   session.connect(token, function(error) {
     // If the connection is successful, publish to the session
     if (error) {
+      console.log("SESSION CONNECT ERROR", error)
       handleError(error);
     } else {
+      console.log("SESSION CONNECT SUCCESS")
       session.publish(publisher, handleError);
     }
   });
   session.on('streamCreated', function(event) {
-  session.subscribe(event.stream, 'subscriber', {
-    insertMode: 'append',
-    width: '100%',
-    height: '100%'
-  }, handleError);
+    console.log("STREAM CREATED", event)
+    session.subscribe(event.stream, 'subscriber', {
+      insertMode: 'append',
+      width: '100%',
+      height: '100%'
+    }, handleError);
   });
 }
 
@@ -60,6 +63,8 @@ function startDeepAR(canvas) {
     canvasWidth: 640, 
     canvasHeight: 480,
     licenseKey: 'your_license_key_goes_here',
+    libPath: './../deepar',
+    segmentationInfoZip: 'segmentation.zip',
     canvas: canvas,
     numberOfFaces: 1,
     onInitialize: function() {
@@ -76,7 +81,7 @@ function startDeepAR(canvas) {
   deepAR.downloadFaceTrackingModel('./deepar/models-68-extreme.bin');
 
   var filterIndex = 0;
-  var filters = ['./effects/lion','./effects/flowers','./effects/dalmatian','./effects/background_blur','./effects/aviators'];
+  var filters = ['./effects/lion','./effects/flowers','./effects/dalmatian','./effects/background_segmentation','./effects/background_blur','./effects/aviators'];
   var changeFilterButton = document.getElementById('change-filter-button');
   changeFilterButton.onclick = function() {
     filterIndex = (filterIndex + 1) % filters.length;
