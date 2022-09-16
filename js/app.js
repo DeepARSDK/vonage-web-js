@@ -1,7 +1,7 @@
 // replace these values with those generated in your TokBox Account
-var apiKey = '46855264';
-var sessionId = '1_MX40Njg1NTI2NH5-MTYwNjM4MjY3OTQ3OH5OckpXUVNqa0dWRUtpemRteGoxc01FMU9-fg';
-var token = 'T1==cGFydG5lcl9pZD00Njg1NTI2NCZzaWc9ZGNmYzI4Y2RlZWUxNjNmMmIzYmY5NWJjYzViYjc2ZDQ2NTJhNjk3YzpzZXNzaW9uX2lkPTFfTVg0ME5qZzFOVEkyTkg1LU1UWXdOak00TWpZM09UUTNPSDVPY2twWFVWTnFhMGRXUlV0cGVtUnRlR294YzAxRk1VOS1mZyZjcmVhdGVfdGltZT0xNjA2MzgyNjk3Jm5vbmNlPTAuODkxMzg0ODE5ODAwMDY5NiZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNjA2Mzg2Mjk3JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9';
+var apiKey = '47571901';
+var sessionId = '1_MX40NzU3MTkwMX5-MTY2MzE4MDE0NjQ1M35iK010bkFnTzlXRFNLU2VIczJQQXZ4c0N-fg';
+var token = 'T1==cGFydG5lcl9pZD00NzU3MTkwMSZzaWc9ZDQyNjI1MTBkOWZiMGU4MDQ3MjIzYjk0MDg4YTllODU2NmQ0YThiOTpzZXNzaW9uX2lkPTFfTVg0ME56VTNNVGt3TVg1LU1UWTJNekU0TURFME5qUTFNMzVpSzAxMGJrRm5UemxYUkZOTFUyVkljekpRUVhaNGMwTi1mZyZjcmVhdGVfdGltZT0xNjYzMTgwMTQ2Jm5vbmNlPTAuNjY0MjcwMzMyNzA1OTU5NCZyb2xlPW1vZGVyYXRvciZleHBpcmVfdGltZT0xNjYzMTgxOTQ2JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9';
 
 
 // create canvas on which DeepAR will render
@@ -10,7 +10,7 @@ var deepARCanvas = document.createElement('canvas');
 // Firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1572422
 // canvas.captureStream causes an error if getContext not called before. Chrome does not need the line below.
 var canvasContext = deepARCanvas.getContext('webgl'); 
-var mediaStream = deepARCanvas.captureStream(25);
+var mediaStream = deepARCanvas.captureStream(30);
 var videoTracks = mediaStream.getVideoTracks();
 
 // start DeepAR
@@ -63,25 +63,27 @@ function initializeSession(videoSource) {
 
 function startDeepAR(canvas) {
 
-  var deepAR = DeepAR({ 
-    canvasWidth: 640, 
-    canvasHeight: 480,
-    licenseKey: 'your_license_key_goes_here',
-    segmentationInfoZip: './../deepar/segmentation.zip',
+  var deepAR = new DeepAR({ 
+    licenseKey: 'your_license_key_here',
     canvas: canvas,
-    numberOfFaces: 1,
-    onInitialize: function() {
-      // start video immediately after the initalization, mirror = true
-      deepAR.startVideo(true);
-
-      deepAR.switchEffect(0, 'slot', './effects/aviators', function() {
-        // effect loaded
-      });
+    segmentationConfig: {
+      modelPath: "deepar/models/segmentation/segmentation-160x160-opt.bin"
+    },
+    deeparWasmPath: 'deepar/wasm/deepar.wasm',
+    callbacks: {
+      onInitialize: function() {
+        // start video immediately after the initalization, mirror = true
+        deepAR.startVideo(true);
+  
+        deepAR.switchEffect(0, 'slot', './effects/aviators', function() {
+          // effect loaded
+        });
+      }
     }
   });
 
 
-  deepAR.downloadFaceTrackingModel('./deepar/models-68-extreme.bin');
+  deepAR.downloadFaceTrackingModel('./deepar/models/face/models-68-extreme.bin');
 
   var filterIndex = 0;
   var filters = ['./effects/lion','./effects/flowers','./effects/dalmatian','./effects/background_segmentation','./effects/background_blur','./effects/aviators'];
@@ -92,21 +94,17 @@ function startDeepAR(canvas) {
   }
 
 
-  // Because we have to use a canvas to render to and then stream to the
-  // Vonage publisher, changing tabs has to pause the video streaming otherwise it will cause a crash
-  // by pausing the 'window.requestAnimationFrame', more can be seen in the documentation:
-  // https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
+  // Changing tabs usually pauses DeepAR rendering since requestAnimationFrame() will not be called by browsers.
+  // To bypass this behaviour, you can call deepAR.setOffscreenRenderingEnabled(true).
+  // It will force rendering even when tab is not focused by using it's internal timer.
+  // This is not recommended so we turn it off as soon as tab gets focus back.
   var visible = true;
   document.addEventListener("visibilitychange", function (event) {
     visible = !visible;
-    // pause and resume are not required, but it will pause the calls to 'window.requestAnimationFrame' 
-    // and the entire rendering loop, which should improve general performance and battery life
     if (!visible) {
-      deepAR.pause()
-      deepAR.stopVideo();
+      deepAR.setOffscreenRenderingEnabled(true);
     } else {
-      deepAR.resume();
-      deepAR.startVideo(true)
+      deepAR.setOffscreenRenderingEnabled(false);
     }
   })
 }

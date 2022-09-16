@@ -1,0 +1,10 @@
+{
+  "name": "vonage-web",
+  "version": "1.0.0",
+  "scripts": {
+    "demo": "live-server"
+  },
+  "dependencies": {
+    "live-server": "^1.2.2"
+  }
+}
