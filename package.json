@@ -2,9 +2,16 @@
   "name": "vonage-web",
   "version": "1.0.0",
   "scripts": {
-    "demo": "live-server"
+    "build": "rm -rf dist && webpack --config webpack.config.js --mode production && cp -r public/* dist && cp -r node_modules/deepar dist/deepar-resources",
+    "dev": "webpack serve --mode development --open --port 8888"
+  },
+  "devDependencies": {
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.11.0"
   },
   "dependencies": {
-    "live-server": "^1.2.2"
+    "@opentok/client": "^2.24.7",
+    "deepar": "^5.0.0"
   }
 }
